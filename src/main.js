@@ -1,37 +1,24 @@
+console.log('inside main.js');
 $ = jQuery = require('jquery');
 var React = require('react');
-var Home = require('./components/homePage');
-var Authors = require('./components/authors/authorPage');
+
+var ReactDOM = require('react-dom');
+var ReactRouter = require('react-router');
+var Router = ReactRouter.Router;
+var Route = ReactRouter.Route;
+var DefaultRoute = Router.DefaultRoute;
+var routes = require('./routes');
+
+var App = require('./components/app');
 var About = require('./components/about/aboutPage');
-var Header = require('./components/common/header');
 
-(function(win) {
-	"use strict";
-	var App = React.createClass({
-		render: function() {
-			var Child;
+// ReactDOM.render(<Router>{routes}</Router>, document.getElementById('app'));
 
-			switch(this.props.route) {
-				case 'about': Child = About; break;
-				case 'authors': Child = Authors; break;
-				default: Child = Home;
-			}
-
-			return (
-				<div>
-					<Header/>
-					<Child/>
-				</div>
-			);
-
-		}
-	});
-
-	function render() {
-		var route = window.location.hash.substr(1);
-		React.render(<App route={route} />, document.getElementById('app'));
-	}
-
-	window.addEventListener('hashchange', render);
-	render();
-})(window);
+ReactDOM.render((
+  <Router>
+	  <Route path="/" component={require('./components/app')}>
+		  <Route path="authors" component={require('./components/authors/authorPage')} />
+		  <Route path="about" component={require('./components/about/aboutPage')} />
+	  </Route>
+  </Router>
+), document.getElementById('app'));
